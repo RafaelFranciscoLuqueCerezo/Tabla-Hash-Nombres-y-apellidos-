@@ -7,11 +7,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 
 public class TablaHash {
-	private final int MAX_HILOS=200;                //Numero m·ximo de hilos
+	private final int MAX_HILOS=200;                //Numero m√°ximo de hilos
 	private int huecos;                             //Numero de huecos que se van a contemplar en el algoritmo       
-	private RowHash[] HashArray;   					//Array del hash      
-	private Semaphore sem=new Semaphore(1);         //Sem·foro que controla la concurrencia de los hilos que agilizan la b˙squeda
-	private ArrayList<Nodo> nodos=new ArrayList<>();//ArrayList de nodos encontrados por el mÈtodo finNodo
+	private RowHash[] HashArray;   			//Array del hash      
+	private Semaphore sem=new Semaphore(1);         //Sem√°foro que controla la concurrencia de los hilos que agilizan la b√∫squeda
+	private ArrayList<Nodo> nodos=new ArrayList<>();//ArrayList de nodos encontrados por el m√©todo finNodo
 	//Constructor
 	public TablaHash(int letras) {
 		if(letras<3)
@@ -25,7 +25,7 @@ public class TablaHash {
 		this.HashArray=new RowHash[num];
 	}
 	//Metodos
-	//getLetra   : devuelve la letra que perteneciente a un valor.
+	//getLetra   : devuelve la letra perteneciente a un valor.
 	public String getLetra(int valor) {
 		switch(valor) {
 		case 0:return "A";case 1:return "B";
@@ -35,7 +35,7 @@ public class TablaHash {
 		case 8:return "I";case 9:return "J";
 		case 10:return "K";case 11:return "L";
 		case 12:return "M";case 13:return "N";
-		case 14:return "—";case 15:return "O" ;
+		case 14:return "√ë";case 15:return "O" ;
 		case 16:return "P";case 17:return "Q";
 		case 18:return "R";case 19:return "S";
 		case 20:return "T";case 21:return "U";
@@ -44,7 +44,7 @@ public class TablaHash {
 		case 26:return "Z";default:return "Z";	
 	}	
 	}
-	//getValor    : devuelve el valor de la letra pasada por par·metro (valor usado para generar el hash)
+	//getValor    : devuelve el valor de la letra pasada por par√°metro (valor usado para generar el hash)
 	public int getValor(char letra) {
 		switch(letra) {
 			case 'A':return 0;case 'B':return 1;
@@ -54,7 +54,7 @@ public class TablaHash {
 			case 'I':return 8;case 'J':return 9;
 			case 'K':return 10;case 'L':return 11;
 			case 'M':return 12;case 'N':return 13;
-			case '—':return 14;case 'O':return 15;
+			case '√ë':return 14;case 'O':return 15;
 			case 'P':return 16;case 'Q':return 17;
 			case 'R':return 18;case 'S':return 19;
 			case 'T':return 20;case 'U':return 21;
@@ -63,13 +63,13 @@ public class TablaHash {
 			case 'Z':return 26;default:return 26;	
 		}
 	}
-	//findNodo    : encuentra todos los nodos que tengan los mismos par·metros de Nombre,Apellido1,Apellido2
+	//findNodo    : encuentra todos los nodos que tengan los mismos par√°metros de Nombre,Apellido1,Apellido2
 	public ArrayList<Nodo> findNodo(String Nombre,String Apellido1,String Apellido2) {
 		long contador_start=System.currentTimeMillis();
 		String object []= {Nombre,Apellido1,Apellido2};
 		int pos_memoria=funcionHash(object);
 		nodos.clear();
-		if((pos_memoria!=-1)&&(this.HashArray[pos_memoria]!=null)) {
+		if(this.HashArray[pos_memoria]!=null) {
 			int hilos= (this.HashArray[pos_memoria].getSize()>MAX_HILOS)?MAX_HILOS:this.HashArray[pos_memoria].getSize();
 			ExecutorService executor=Executors.newFixedThreadPool(hilos);
 			for(int i=0;i<hilos;i++) {
@@ -82,14 +82,12 @@ public class TablaHash {
 		System.out.println("findNodo() tiempo(milisegundos): "+(contador_end-contador_start)+" ms");
 		return nodos;
 	}
-	//addNodo     : aÒade un nodo al array interno de una posiciÛn de memoria de la tabla de hash
+	//addNodo     : a√±ade un nodo al array interno de una posici√≥n de memoria de la tabla de hash
 	public void addNodo(Nodo nodo) {
 		int pos_memoria=funcionHash(nodo.getString());
-		if(pos_memoria!=-1) {
-			if(this.HashArray[pos_memoria]==null)
-				this.HashArray[pos_memoria]=new RowHash();
-			this.HashArray[pos_memoria].addNodo(nodo);
-		}
+		if(this.HashArray[pos_memoria]==null)
+			this.HashArray[pos_memoria]=new RowHash();
+		this.HashArray[pos_memoria].addNodo(nodo);
 	}
 	//funcionHash : genera un hash mediante un algoritmo
 	public int funcionHash(String Nombre []) {
